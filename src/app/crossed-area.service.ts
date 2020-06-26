@@ -11,4 +11,7 @@ export class CrossedAreaService {
   getData(apiPath: string): Observable<any> {
     return this.http.get<any>(apiPath);
   }
+  getDataTest(apiPath: string): Observable<any> {
+    return this.http.get<any>('https://jsonplaceholder.typicode.com/users');
+  }
 }

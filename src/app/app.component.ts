@@ -30,7 +30,11 @@ export class AppComponent implements OnInit {
   };
 
   ngOnInit(): void {
-
+    this.crossedAreaService.getDataTest("").subscribe((data: any) => {
+      console.log(data);
+      this.data = data
+      this.setColumns(data);
+    })
   }
 
   getData(crossedAreaModel: CrossedAreaModel) {
@@ -40,7 +44,7 @@ export class AppComponent implements OnInit {
       + '&EndDate=' + crossedAreaModel.endDate
       + '&ReturnDataFields=' + crossedAreaModel.returnDataFields;
 
-    this.crossedAreaService.getData(urlPath)
+    this.crossedAreaService.getDataTest(urlPath)
       .subscribe((data: any) => {
         console.log(data);
         this.data = data;
@@ -59,20 +63,27 @@ export class AppComponent implements OnInit {
 
   }
 
-  setColumns(form) {
-    let columns: any = form.returnDataFields.split(",");
-    let timeCol: ColDef;
-    timeCol.headerName = "Time";
-    timeCol.field = "time";
-    this.columnDefs.push(timeCol);
+  setColumns(f) {
+    let form: string = "name,username,email";
+    let columns: any = form.split(",");
+    let columnDefs = [];
     columns.forEach(element => {
-      let column: ColDef;
-      column.headerName = element;
       element = element.charAt(0).toLowerCase() + element.slice(1);
-      column.field = element;
-      this.columnDefs.push(column);
+      console.log(element);
+      let definition: ColDef = { headerName: element, field: element, width: 120 };
+      columnDefs.push(definition);
     });
+    this.gridOptions.api.setColumnDefs(columnDefs);
   }
+
+  // setColumns(columns: string[]) {
+  //   this.columnDefs = [];
+  //   columns.forEach((column: string) => {
+  //     let definition: ColDef = { headerName: column, field: column, width: 120 };
+
+  //     this.columnDefs.push(definition);
+  //   });
+  // }
   createForm() {
     return this.formBuilder.group({
       serialNumber: ['', []],
